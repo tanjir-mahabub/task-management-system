@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import useLocalStorage from '../useLocalStorage';
 
-const CreateTaskForm = ({ onClose }) => {
+const CreateTaskForm = ({ onClose, addTask }) => {
+    const [tasks, setTasks] = useLocalStorage('tasks', []);
 
     const [taskData, setTaskData] = useState({
         title: '',
@@ -30,14 +32,14 @@ const CreateTaskForm = ({ onClose }) => {
             attachments: [],
             subTasks: [],
         });
-
+        
     };
 
     const handleAttachmentChange = (e) => {
         setTaskData({ ...taskData, attachments: e.target.files });
     };
 
-    const saveFormDataToLocalstorage = (formData, onClose) => {
+    const saveFormDataToLocalstorage = (formData) => {
 
         const existingTasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
@@ -49,13 +51,14 @@ const CreateTaskForm = ({ onClose }) => {
 
         // Save the updated tasks array to localStorage
         localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-
-        onClose();
+        // onClose();
+        
+        addTask(updatedTask);
     };
 
 
     return (
-        <form onSubmit={() => handleSubmit(onClose)}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <label>Title:</label>
                 <input
@@ -63,13 +66,13 @@ const CreateTaskForm = ({ onClose }) => {
                     type="text"
                     value={taskData.title}
                     onChange={(e) => setTaskData({ ...taskData, title: e.target.value })}
-                    required
+                    
                 />
             </div>
             <div>
                 <label>Description:</label>
                 <textarea
-                    required
+                    
                     value={taskData.description}
                     onChange={(e) => setTaskData({ ...taskData, description: e.target.value })}
                 />
@@ -78,7 +81,7 @@ const CreateTaskForm = ({ onClose }) => {
                 <label>Priority:</label>
                 <select
                     className='py-1.5'
-                    required
+                    
                     value={taskData.priority}
                     onChange={(e) => setTaskData({ ...taskData, priority: e.target.value })}
                 >
@@ -91,7 +94,7 @@ const CreateTaskForm = ({ onClose }) => {
                 <label>Start Date:</label>
                 <input
                     className='py-1'
-                    required
+                    
                     type="date"
                     value={taskData.startDate}
                     onChange={(e) => setTaskData({ ...taskData, startDate: e.target.value })}
@@ -101,7 +104,7 @@ const CreateTaskForm = ({ onClose }) => {
                 <label>End Date:</label>
                 <input
                     className='py-1'
-                    required
+                    
                     type="date"
                     value={taskData.endDate}
                     onChange={(e) => setTaskData({ ...taskData, endDate: e.target.value })}
@@ -111,7 +114,7 @@ const CreateTaskForm = ({ onClose }) => {
                 <label>Status:</label>
                 <select
                     className='py-1.5'
-                    required
+                    
                     value={taskData.status}
                     onChange={(e) => setTaskData({ ...taskData, status: e.target.value })}
                 >
@@ -124,7 +127,7 @@ const CreateTaskForm = ({ onClose }) => {
                 <label>Assigned Person:</label>
                 <select
                     className='py-1.5'
-                required
+                
                     value={taskData.assignedPerson}
                     onChange={(e) => setTaskData({ ...taskData, assignedPerson: e.target.value })}
                 >

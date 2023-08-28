@@ -14,8 +14,8 @@ const TaskList = ({ title, tasks }) => {
         <h2 className='text-xl font-bold text-white/90'>{title}</h2>
       </div>
       <ul className=''>
-        {tasks.map((task) => (
-          <li className='hover:bg-gray-200 cursor-pointer hover:text-purple-700 py-3 border-b last:border-b-0 text-lg font-semibold' key={task.id} onClick={() => handleTaskClick(task)}>
+        {tasks.map((task, i) => (
+          <li className='hover:bg-gray-200 cursor-pointer hover:text-purple-700 py-3 border-b last:border-b-0 text-lg font-semibold' key={task.id + task.title} onClick={() => handleTaskClick(task)}>
             {task.title}
           </li>
         ))}

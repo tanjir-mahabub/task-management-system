@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TaskList from "./components/TaskList";
 import TaskModal from "./components/TaskModal";
 import "./app.css";
+import useLocalStorage from "./useLocalStorage";
 
 const App = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [tasks, setTasks] = useState(
-    JSON.parse(localStorage.getItem('tasks')) || []
-  );
-  
+  const [tasks, setTasks] = useLocalStorage('tasks', []);
+
   // Organize tasks by status
   const todoTasks = tasks.filter(task => task.status === 'todo');
   const inProgressTasks = tasks.filter(task => task.status === 'inProgress');
@@ -22,9 +21,12 @@ const App = () => {
     setIsCreateModalOpen(false);
   };
 
-  useEffect(() => {
-    setTasks(JSON.parse(localStorage.getItem('tasks')) || []);
-  }, [])
+  const updateToDo = (task) => {
+    console.log(task);
+    setTasks(prevState => [...prevState, task])
+  }
+
+ 
 
   return (
     <div className="w-[70%] h-full mt-32 mx-auto">
@@ -33,7 +35,7 @@ const App = () => {
       <button className="bg-black text-white px-3 py-2.5 rounded-md
       my-3" type="button" onClick={handleOpenCreateModal}>Create Task</button>
       {isCreateModalOpen && (
-        <TaskModal onClose={handleCloseCreateModal} />
+        <TaskModal onClose={handleCloseCreateModal} updateToDo={updateToDo} />
       )}
 
       <div className="">
